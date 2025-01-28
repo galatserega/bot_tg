@@ -2,11 +2,11 @@ import os
 from dotenv import load_dotenv
 from aiogram.fsm.state import State, StatesGroup
 
-ADMIN_ID = 567683674
+
 load_dotenv()
 IBAN = os.getenv('IBAN')
 TOKEN = os.getenv("BOT_TOKEN")  # Убедись, что переменная BOT_TOKEN указана в .env
-
+ADMIN_ID = int(os.getenv('ADMIN_ID'))
 
 class OrderState(StatesGroup):
     """Состояния заказа."""
@@ -26,4 +26,6 @@ PRICES = {
     "☕ Банановий лате": 85,
     "☕ Кокосовий лате": 85,
     "☕ Капуоранж": 70,
+    'Паніні Максі': 70,
+    'Хот-Дог': 65
 }

@@ -1,7 +1,6 @@
 import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
-
 from config import TOKEN
 from handlers.start import router  # Імпортуємо ваші хендлери
 

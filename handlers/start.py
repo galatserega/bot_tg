@@ -9,11 +9,16 @@ from datetime import datetime
 router = Router()
 
 USER_CART = {}
+
+PHONE_REGEX = r"^0\d{9}$"
+WORKING_HOURS = (8, 16)
+
+
 @router.message(F.text == "/start")
 async def start_command(message: Message, state: FSMContext):
     """Обробник команди /start."""
     current_time = datetime.now().hour
-    if current_time < 8 or current_time > 16:
+    if current_time < WORKING_HOURS[0] or current_time > WORKING_HOURS[1]:
         await message.answer("Вибачте, зараз замовлення недоступне. Графік роботи з 8 ранку до 16 години.")
         return
 
@@ -98,7 +103,7 @@ async def process_payment(message: Message, state: FSMContext):
         # Переходимо до наступного кроку
         await state.set_state(OrderState.waiting_for_address)
         await message.answer(
-            "Напишіть номер телефону в форматі: +380ХХХХХХХХХ для підтвердження замовлення та умов доставки:"
+            "Напишіть номер телефону в форматі: 0ХХХХХХХХХ для підтвердження замовлення та умов доставки:"
         )
 
     elif payment_method == "Оплата через IBAN":
@@ -107,7 +112,7 @@ async def process_payment(message: Message, state: FSMContext):
         iban_number = IBAN  # Замініть на свій реальний номер IBAN
         await message.answer(
             f"Ваш IBAN для оплати:\n`{iban_number}`\n\n"
-            "Скопіюйте номер IBAN та здійсніть оплату. Після цього введіть номер телефону в форматі +380XXXXXXXXX для підтвердження замовлення.",
+            "Скопіюйте номер IBAN та здійсніть оплату. Після цього введіть номер телефону в форматі 0XXXXXXXXX для підтвердження замовлення.",
             parse_mode="Markdown"
         )
         await state.set_state(OrderState.waiting_for_address)
@@ -122,13 +127,13 @@ async def process_address(message: Message, state: FSMContext):
     user_id = message.from_user.id
     phone = message.text.strip()
 
-    # Регулярний вираз для перевірки телефонного номера (наприклад, +380XXXXXXXXX)
-    phone_regex = r"^\+380\d{9}$"
+    # Регулярний вираз для перевірки телефонного номера (наприклад, 0XXXXXXXXX)
+
 
     # Перевіряємо, чи номер телефону відповідає формату
-    if not re.match(phone_regex, phone):
+    if not re.match(PHONE_REGEX, phone):
         await message.answer(
-            "Будь ласка, введіть правильний номер телефону у форматі: +380XXXXXXXXX"
+            "Будь ласка, введіть правильний номер телефону у форматі: 0XXXXXXXXX"
         )
         return
 
