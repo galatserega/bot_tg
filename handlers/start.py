@@ -18,7 +18,8 @@ WORKING_HOURS = (8, 16)
 async def start_command(message: Message, state: FSMContext):
     """Обробник команди /start."""
     current_time = datetime.now().hour
-    if current_time < WORKING_HOURS[0] or current_time > WORKING_HOURS[1]:
+    current_day = datetime.now().weekday()
+    if current_time < WORKING_HOURS[0] or current_time > WORKING_HOURS[1] or current_day in (5, 6):
         await message.answer("Вибачте, зараз замовлення недоступне. Графік роботи з 8 ранку до 16 години.")
         return
 
@@ -98,7 +99,8 @@ async def process_payment(message: Message, state: FSMContext):
         # Підтвердження оплати готівкою
         await state.update_data(payment_method="Готівка")
         await message.answer(
-            "Дякую! Ваше замовлення буде оброблено найближчим часом."
+            "Дякую! Ваше замовлення буде оброблено найближчим часом.",
+            reply_markup=ReplyKeyboardRemove()  # Видаляємо меню
         )
         # Переходимо до наступного кроку
         await state.set_state(OrderState.waiting_for_address)
@@ -113,7 +115,8 @@ async def process_payment(message: Message, state: FSMContext):
         await message.answer(
             f"Ваш IBAN для оплати:\n`{iban_number}`\n\n"
             "Скопіюйте номер IBAN та здійсніть оплату. Після цього введіть номер телефону в форматі 0XXXXXXXXX для підтвердження замовлення.",
-            parse_mode="Markdown"
+            parse_mode="Markdown",
+            reply_markup=ReplyKeyboardRemove()
         )
         await state.set_state(OrderState.waiting_for_address)
 

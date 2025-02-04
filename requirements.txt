@@ -1,3 +1,5 @@
 aiogram
 python-dotenv
 aiohttp
+pyTelegramBotAPI
+requests
