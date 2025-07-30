@@ -26,7 +26,7 @@ async def start_command(message: Message, state: FSMContext):
     await state.set_state(OrderState.waiting_for_coffee)
     await message.answer(
         "Ласкаво просимо!\nОберіть каву з меню нижче:\n"
-        "Прошу звернути увагу, що безкоштовна доставка буде при замовленні від 100 грн. Дякую за розуміння.",
+        "Ціна при замовленні через бота на 10грн більше, (платіж на доставку). Дякую за розуміння.",
         reply_markup=main_menu()
     )
     # Ініціалізуємо кошик для користувача
