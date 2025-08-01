@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from config import TOKEN
 from handlers.start import router  # Імпортуємо ваші хендлери
-from handlers.spam_filter import router as spam_router
+from handlers.spam_filters import router as spam_router
 
 
 async def main():
@@ -14,7 +14,6 @@ async def main():
 
     # Реєструємо всі маршрути (хендлери)
     dp.include_router(router)
-    dp.include_router(router)        # твои хендлеры
     dp.include_router(spam_router)   # фильтр спама
 
     print("Бот запущено!")  # Лог для підтвердження старту
