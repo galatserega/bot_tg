@@ -13,7 +13,7 @@ async def main():
     dp = Dispatcher()
 
     # Реєструємо всі маршрути (хендлери)
-    dp.include_router(router)
+    dp.include_router(router)        # твои хендлеры
     dp.include_router(spam_router)   # фильтр спама
 
     print("Бот запущено!")  # Лог для підтвердження старту
