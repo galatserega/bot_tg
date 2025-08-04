@@ -6,7 +6,11 @@ router = Router()
 
 # Ключевые слова спама
 BAD_WORDS = ['http', 'https', 'freeether',
-             'airdrop', 'wallet', 'click', 'connect', 'Jetacash', 'jetacash', 'bonus', 'deposit']
+             'airdrop', 'wallet', 'click',
+             'connect', 'Jetacash', 'jetacash',
+             'bonus', 'deposit', 'cards', 'crypto',
+             'earn', 'earnings', 'investment',
+             'investments', 'money', 'profit', 'profits', 'Jetacas', 'promo', 'code']
 
 
 ADMIN_ID = int(os.getenv('ADMIN_ID'))
