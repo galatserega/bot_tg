@@ -4,21 +4,26 @@ from aiogram.types import Message
 
 router = Router()
 
-# Ключевые слова спама
-BAD_WORDS = ['http', 'https', 'freeether',
-             'airdrop', 'wallet', 'click',
-             'connect', 'Jetacash', 'jetacash',
-             'bonus', 'deposit', 'cards', 'crypto',
-             'earn', 'earnings', 'investment',
-             'investments', 'money', 'profit', 'profits', 'Jetacas', 'promo', 'code']
-
+BAD_WORDS = [
+    'http', 'https', 'freeether', 'airdrop', 'wallet', 'click',
+    'connect', 'Jetacash', 'jetacash', 'bonus', 'deposit', 'cards', 'crypto',
+    'earn', 'earnings', 'investment', 'investments', 'money', 'profit',
+    'profits', 'Jetacas', 'promo', 'code', 'bonus', 'brand-new'
+]
 
 ADMIN_ID = int(os.getenv('ADMIN_ID'))
 
 
-@router.message(F.text)
+@router.message(F.text | F.photo | F.document)
 async def filter_spam(message: Message):
-    text = message.text.lower()
+    text = (message.text or message.caption or "").lower()
+
+    # Банимо будь-які фото/зображення-документи
+    if message.photo or (message.document and message.document.mime_type.startswith("image/")):
+        await message.delete()
+        return
+
+    # Банимо повідомлення зі спамними словами
     if any(bad_word in text for bad_word in BAD_WORDS):
         await message.delete()
         return
